@@ -18,15 +18,11 @@ if [ "$base" == "y" ]; then
 	rm .bash_profile .bashrc
 	homesick clone sajnikanth/castle
 	homesick link castle
-	sudo apt-get install mysql-server -y
 	# Install pip and other stuff via pip
 	sudo apt-get install python-pip -y
 	pip install -U pip
-	sudo apt-get install python-dev libmysqlclient-dev -y
-	sudo pip install nose selenium nosedbreport mysql-python termcolor flake8
-	# Install virtual display
-	sudo apt-get install xvfb -y
-	sudo apt-get install firefox -y
+	sudo apt-get install python-dev -y
+	sudo pip install nose selenium termcolor flake8
 	# Install chrome and chrome driver
 	wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 	sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
@@ -39,25 +35,6 @@ if [ "$base" == "y" ]; then
 	sudo mv chromedriver /usr/local/bin
 	# Install phantomjs
 	sudo apt-get install phantomjs -y
-	echo ""
-	echo -n  -e "\033[1;31mDo you want to install selenium server? \033[0;32m(y/n): \033[0m"
-	read -n 1 base
-	if [ "$base" == "y" ]; then
-		echo ""
-		echo -e "\033[0;32mContinuing installation...\033[0m"
-		sudo apt-get install openjdk-8-jre-headless -y
-		sudo apt-get install apache2 -y
-		# download selenium server jar
-		mkdir ~/selenium-server && wget -O ~/selenium-server/selenium-server-standalone.jar http://goo.gl/PJUZfa
-		# restart apache for good measure
-		sudo /etc/init.d/apache2 restart
-		# set display
-		nohup Xvfb :0 -screen 0 1024x768x24 2>&1 >/dev/null
-		export DISPLAY=:0
-		nohup java -jar ~/selenium-server/selenium-server-standalone.jar & > selenium.log
-		echo ""
-		curl "http://localhost:4444/wd/hub/status"
-	fi
 	echo ""
 	echo -e "\033[0;32mAll Done!\033[0m"
 else
